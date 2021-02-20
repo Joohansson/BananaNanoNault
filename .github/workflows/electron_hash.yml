@@ -29,7 +29,7 @@ jobs:
           tag: v${{ steps.package-version.outputs.current-version }}
           version: ${{ steps.package-version.outputs.current-version }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WORKFLOW: ${{ secrets.WORKFLOW }}
 
   release:
     runs-on: ${{ matrix.os }}
@@ -97,7 +97,7 @@ jobs:
         with:
           # GitHub token, automatically provided to the action
           # (No need to define this secret in the repo settings)
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          WORKFLOW: ${{ secrets.WORKFLOW }}
 
           # is already built
           skip_build: true
@@ -140,7 +140,7 @@ jobs:
         if: matrix.os == 'ubuntu-latest' && startsWith(github.ref, 'refs/tags/')
         uses: actions/upload-release-asset@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WORKFLOW: ${{ secrets.WORKFLOW }}
         with:
           upload_url: ${{ needs.pre_build.outputs.output1 }} # This pulls ID from the Release Drafter step
           asset_path: desktop-app/build/Nault-${{ needs.pre_build.outputs.output2 }}.${{ matrix.app_ext }}
@@ -151,7 +151,7 @@ jobs:
         if: matrix.os == 'macos-latest' && startsWith(github.ref, 'refs/tags/')
         uses: actions/upload-release-asset@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WORKFLOW: ${{ secrets.WORKFLOW }}
         with:
           upload_url: ${{ needs.pre_build.outputs.output1 }} # This pulls ID from the Release Drafter step
           asset_path: desktop-app/build/Nault-${{ needs.pre_build.outputs.output2 }}.${{ matrix.app_ext }}
@@ -162,7 +162,7 @@ jobs:
         if: matrix.os == 'windows-latest' && startsWith(github.ref, 'refs/tags/')
         uses: actions/upload-release-asset@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WORKFLOW: ${{ secrets.WORKFLOW }}
         with:
           upload_url: ${{ needs.pre_build.outputs.output1 }} # This pulls ID from the Release Drafter step
           asset_path: desktop-app/build/Nault Setup ${{ needs.pre_build.outputs.output2 }}.${{ matrix.app_ext }}
@@ -173,7 +173,7 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         uses: actions/upload-release-asset@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WORKFLOW: ${{ secrets.WORKFLOW }}
         with:
           upload_url: ${{ needs.pre_build.outputs.output1 }} # This pulls ID from the Release Drafter step
           asset_path: desktop-app/build/${{ matrix.artifact_name }}
@@ -184,7 +184,7 @@ jobs:
         if: matrix.os == 'ubuntu-latest' && startsWith(github.ref, 'refs/tags/')
         uses: actions/upload-release-asset@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WORKFLOW: ${{ secrets.WORKFLOW }}
         with:
           upload_url: ${{ needs.pre_build.outputs.output1 }} # This pulls ID from the Release Drafter step
           asset_path: desktop-app/build/latest-linux.yml
@@ -195,7 +195,7 @@ jobs:
         if: matrix.os == 'macos-latest' && startsWith(github.ref, 'refs/tags/')
         uses: actions/upload-release-asset@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WORKFLOW: ${{ secrets.WORKFLOW }}
         with:
           upload_url: ${{ needs.pre_build.outputs.output1 }} # This pulls ID from the Release Drafter step
           asset_path: desktop-app/build/latest-mac.yml
@@ -206,7 +206,7 @@ jobs:
         if: matrix.os == 'windows-latest' && startsWith(github.ref, 'refs/tags/')
         uses: actions/upload-release-asset@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WORKFLOW: ${{ secrets.WORKFLOW }}
         with:
           upload_url: ${{ needs.pre_build.outputs.output1 }} # This pulls ID from the Release Drafter step
           asset_path: desktop-app/build/latest.yml

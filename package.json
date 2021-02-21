@@ -1,8 +1,8 @@
 {
-  "name": "nault",
+  "name": "bananonanonault",
   "version": "1.10.0",
   "license": "MIT",
-  "description": "Wallet for interacting with Nano",
+  "description": "Wallet for interacting with Banano via Nano",
   "author": "The Nano Community / Andrew Steele",
   "main": "desktop-app/dist/desktop-app.js",
   "scripts": {
@@ -102,9 +102,9 @@
     "zxcvbn3": "^0.1.1"
   },
   "build": {
-    "appId": "cc.nault",
+    "appId": "bananonanonault",
     "buildVersion": "1.0.0",
-    "productName": "Nault",
+    "productName": "BananoNanoNault",
     "copyright": "Copyright © 2020 The Nano Community / Andrew Steele",
     "directories": {
       "output": "desktop-app/build",
@@ -129,13 +129,13 @@
       "target": "AppImage",
       "icon": "desktop-app/assets/linux",
       "desktop": {
-        "GenericName": "Nano Wallet"
+        "GenericName": "Banano Wallet"
       }
     },
     "protocols": {
-      "name": "nano",
+      "name": "banano",
       "schemes": [
-        "nano"
+        "banano"
       ],
       "role": "Viewer"
     }

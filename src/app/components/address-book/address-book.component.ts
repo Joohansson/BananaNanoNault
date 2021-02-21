@@ -138,7 +138,7 @@ export class AddressBookComponent implements OnInit, AfterViewInit {
       return this.notificationService.sendError(`Address books with more than 24 entries need to use the file export method.`);
     }
     const base64Data = btoa(JSON.stringify(exportData));
-    const exportUrl = `https://nault.cc/import-address-book#${base64Data}`;
+    const exportUrl = `https://joohansson.github.io/BananaNanoNault/import-address-book#${base64Data}`;
 
     this.addressBookQRExportUrl = exportUrl;
     this.addressBookQRExportImg = await QRCode.toDataURL(exportUrl);
@@ -146,7 +146,7 @@ export class AddressBookComponent implements OnInit, AfterViewInit {
   }
 
   exportAddressBookToFile() {
-    const fileName = `Nault-AddressBook.json`;
+    const fileName = `BananoNanoNault-AddressBook.json`;
 
     const exportData = this.addressBookService.addressBook;
     this.triggerFileDownload(fileName, exportData);
@@ -166,7 +166,7 @@ export class AddressBookComponent implements OnInit, AfterViewInit {
       try {
         const importData = JSON.parse(fileData);
         if (!importData.length || !importData[0].account) {
-          return this.notificationService.sendError(`Bad import data, make sure you selected a Nault Address Book export`);
+          return this.notificationService.sendError(`Bad import data, make sure you selected a BananoNanoNault Address Book export`);
         }
 
         const encoded = btoa(JSON.stringify(importData));

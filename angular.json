@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "nault": {
+    "bananonanonault": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -101,21 +101,21 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "nault:build"
+            "browserTarget": "bananonanonault:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "nault:build:production"
+              "browserTarget": "bananonanonault:build:production"
             },
             "desktop": {
-              "browserTarget": "nault:build:desktop"
+              "browserTarget": "bananonanonault:build:desktop"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "nault:build"
+            "browserTarget": "bananonanonault:build"
           }
         },
         "test": {
@@ -149,7 +149,7 @@
         }
       }
     },
-    "nault-e2e": {
+    "bananonanonault-e2e": {
       "root": "e2e",
       "sourceRoot": "e2e",
       "projectType": "application",
@@ -158,7 +158,7 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "./protractor.conf.js",
-            "devServerTarget": "nault:serve"
+            "devServerTarget": "bananonanonault:serve"
           }
         },
         "lint": {
@@ -175,7 +175,7 @@
       }
     }
   },
-  "defaultProject": "nault",
+  "defaultProject": "bananonanonault",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",

@@ -102,7 +102,7 @@ export class ManageWalletComponent implements OnInit {
       return this.notifications.sendWarning(`Wallet must be unlocked`);
     }
 
-    const fileName = `Nault-Wallet.json`;
+    const fileName = `BananoNanoNault-Wallet.json`;
     const exportData = this.walletService.generateExportData();
     this.triggerFileDownload(fileName, exportData);
 

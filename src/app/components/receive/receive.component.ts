@@ -82,7 +82,7 @@ export class ReceiveComponent implements OnInit {
           // On the other hand, it may be more efficient to use 1/64 and simply let the work cache rework in case a send is made instead
           // The typical user scenario would be to let the wallet auto receive first
           console.log('Adding pending to work cache');
-          this.workPool.addWorkToCache(frontiers.frontiers[account], 1 / 64);
+          this.workPool.addWorkToCache(frontiers.frontiers[account], 1);
         }
       }
     }

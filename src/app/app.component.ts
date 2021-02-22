@@ -91,7 +91,7 @@ export class AppComponent implements OnInit {
 
     // Workaround fix for github pages when Nault is refreshed (or externally linked) and there is a subpath for example to the send screen.
     // This data is saved from the 404.html page
-    const path = localStorage.getItem('path');
+    const path = localStorage.getItem('path').replace('BananoNanoNault/', '');
 
     if (path) {
       const search = localStorage.getItem('query'); // ?param=value

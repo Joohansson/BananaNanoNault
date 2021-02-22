@@ -254,18 +254,19 @@ export class NanoBlockService {
     const openEquiv = type === TxType.open;
     console.log('Signing block of subtype: ' + TxType[type]);
 
+    // Banano hack part 1: Replacing ban_ prefix with nano_ to be able to sign
     if (ledger) {
       let ledgerBlock = null;
       if (type === TxType.send) {
         ledgerBlock = {
           previousBlock: block.previous,
-          representative: block.representative,
+          representative: block.representative.replace('ban_', 'nano_'),
           balance: block.balance,
-          recipient: this.util.account.getPublicAccountID(this.util.hex.toUint8(block.link)),
+          recipient: this.util.account.getPublicAccountID(this.util.hex.toUint8(block.link)).replace('ban_', 'nano_'),
         };
       } else if (type === TxType.receive || type === TxType.open) {
         ledgerBlock = {
-          representative: block.representative,
+          representative: block.representative.replace('ban_', 'nano_'),
           balance: block.balance,
           sourceBlock: block.link,
         };
@@ -275,10 +276,13 @@ export class NanoBlockService {
       } else if (type === TxType.change) {
         ledgerBlock = {
           previousBlock: block.previous,
-          representative: block.representative,
+          representative: block.representative.replace('ban_', 'nano_'),
           balance: block.balance,
         };
       }
+      prevBlock.account = prevBlock.account.replace('ban_', 'nano_');
+      prevBlock.representative = prevBlock.representative.replace('ban_', 'nano_');
+
       try {
         this.sendLedgerNotification();
         // On new accounts, we do not need to cache anything
@@ -311,6 +315,11 @@ export class NanoBlockService {
       this.notifications.removeNotification('pow');
       this.workPool.removeFromCache(workBlock);
     }
+
+    // Banano hack part 2: Changing back to ban_ prefix to be able to publish block
+    block.account = block.account.replace('nano_', 'ban_');
+    block.representative = block.representative.replace('nano_', 'ban_');
+
     return block; // return signed block (with or without work)
   }
 

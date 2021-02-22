@@ -333,8 +333,8 @@ export class SignComponent implements OnInit {
     // sign the block
     const block = await this.nanoBlock.signOfflineBlock(walletAccount, this.currentBlock,
       this.previousBlock, this.txType, this.shouldGenWork, this.selectedThreshold, isLedger);
-    console.log('Signature: ' + block.signature || 'Error');
-    console.log('Work: ' + block.work || 'Not applied');
+    console.log('Signature: ' + block.signature ? block.signature : 'Error');
+    console.log('Work: ' + block.work ? block.work : 'Not applied');
 
     if (!block.signature) {
       this.confirmingTransaction = false;

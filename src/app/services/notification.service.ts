@@ -40,7 +40,7 @@ export class NotificationService {
     this.sendWarning(
       `<b>Notice:</b> You may experience issues using a Ledger device with Google Chrome. ` +
       `If you do please use Brave/Opera browser or ` +
-      `<a href="https://github.com/Joohansson/BananaNanoNault/releases" target="_blank" rel="noopener noreferrer">BananoNanoNault Desktop</a>.`,
+      `<a href="https://github.com/Joohansson/BananoNanoNault/releases" target="_blank" rel="noopener noreferrer">BananoNanoNault Desktop</a>.`,
       { length: 0, identifier: 'chrome-ledger' }
       );
   }

@@ -138,7 +138,7 @@ export class AddressBookComponent implements OnInit, AfterViewInit {
       return this.notificationService.sendError(`Address books with more than 24 entries need to use the file export method.`);
     }
     const base64Data = btoa(JSON.stringify(exportData));
-    const exportUrl = `https://joohansson.github.io/BananaNanoNault/import-address-book#${base64Data}`;
+    const exportUrl = `https://joohansson.github.io/BananoNanoNault/import-address-book#${base64Data}`;
 
     this.addressBookQRExportUrl = exportUrl;
     this.addressBookQRExportImg = await QRCode.toDataURL(exportUrl);

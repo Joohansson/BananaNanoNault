@@ -256,15 +256,15 @@ function getApplicationMenu() {
         {type: 'separator'},
         {
           label: 'View GitHub',
-          click () { loadExternal('https://github.com/Joohansson/BananaNanoNault'); }
+          click () { loadExternal('https://github.com/Joohansson/BananoNanoNault'); }
         },
         {
           label: 'Submit a bug report',
-          click () { loadExternal('https://github.com/Joohansson/BananaNanoNault/issues/new'); }
+          click () { loadExternal('https://github.com/Joohansson/BananoNanoNault/issues/new'); }
         },
         {
           label: 'Release notes',
-          click () { loadExternal('https://github.com/Joohansson/BananaNanoNault/releases'); }
+          click () { loadExternal('https://github.com/Joohansson/BananoNanoNault/releases'); }
         },
         {type: 'separator'},
         {

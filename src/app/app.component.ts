@@ -94,7 +94,6 @@ export class AppComponent implements OnInit {
     let path = localStorage.getItem('path');
 
     if (path) {
-      path = path.replace('BananoNanoNault/', '')
       const search = localStorage.getItem('query'); // ?param=value
       const fragment = localStorage.getItem('fragment'); // #value
       localStorage.removeItem('path');
@@ -107,9 +106,9 @@ export class AppComponent implements OnInit {
         urlSearch.forEach(function(value, key) {
           queryParams[key] = value;
         });
-        this.router.navigate([path], { queryParams: queryParams});
+        this.router.navigate([path.replace('BananoNanoNault/', '')], { queryParams: queryParams});
       } else if (fragment && fragment.length) {
-        this.router.navigate([path], { fragment: fragment});
+        this.router.navigate([path.replace('BananoNanoNault/', '')], { fragment: fragment});
       } else {
         this.router.navigate([path]);
       }

@@ -8,13 +8,18 @@
       <div class="uk-width-1-1" *ngIf="!isConfigured()">
         <div uk-grid>
           <div class="uk-width-1-1" style="margin-top: 10px;">
-            <span class="uk-text-small">To get started, choose an option below to configure your wallet</span>
+            <span class="uk-text-small">Secure access of your Banano using one of these options</span>
           </div>
+          <!--
           <div class="uk-width-1-2@m">
             <button routerLink="/configure-wallet" class="uk-button uk-button-primary uk-width-1-1 uk-button-large">Create A New Wallet</button>
           </div>
+          -->
           <div class="uk-width-1-2@m">
-            <button routerLink="/configure-wallet" [queryParams]="{ import: 1}" class="uk-button uk-button-primary uk-width-1-1 uk-button-large">Import An Existing Wallet</button>
+            <button routerLink="/configure-wallet" [queryParams]="{ import: 1}" class="uk-button uk-button-primary uk-width-1-1 uk-button-large">Import Ledger</button>
+          </div>
+          <div class="uk-width-1-2@m">
+            <button routerLink="/remote-signing" [queryParams]="{ import: 1}" class="uk-button uk-button-primary uk-width-1-1 uk-button-large">Remote Signing</button>
           </div>
         </div>
       </div>
@@ -43,8 +48,8 @@
                 <a class="uk-accordion-title uk-link-text" href="#">Why Use BananoNanoNault?</a>
                 <div class="uk-accordion-content">
                   <dl class="uk-description-list">
-                    <dt>Banano Focused</dt>
-                    <dd>Specifically made for accessing Banano locked by a Ledger for Banano accounts maching Nano accounts. Usually when airdrops happens. Banano can then be accessed by connected the Ledger using the <strong>Nano app</strong> (not banano).<br>Using the Banano network.</dd>
+                    <dt>Focused on Security</dt>
+                    <dd>Specifically made for accessing Banano locked by a Ledger for Banano accounts maching Nano accounts. Usually when airdrops happens. Banano can then be accessed by connected the Ledger using the <strong>Nano app</strong> (not banano).<br>This app is using the Banano network. Another option is to use remote signing via an offline device in order to protect your keys.</dd>
                     <dt>Any Device, Anywhere</dt>
                     <dd>Access banano via the web, or <a href="https://github.com/Joohansson/BananaNanoNault/releases" target="_blank" rel="noopener noreferrer">download the desktop wallet</a> available for Windows/Mac/Linux.</dd>
                   </dl>

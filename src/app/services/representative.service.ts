@@ -120,10 +120,10 @@ export class RepresentativeService {
     const uniqueReps = this.getUniqueRepresentatives(accounts);
     const representatives = await this.getRepresentativesDetails(uniqueReps);
     const onlineReps = await this.getOnlineRepresentatives();
-    const quorum = await this.api.confirmationQuorum();
+    // const quorum = await this.api.confirmationQuorum();
 
-    const online_stake_total = quorum ? this.util.nano.rawToMnano(quorum.online_stake_total) : null;
-    this.onlineStakeTotal = online_stake_total ? new BigNumber(online_stake_total) : null;
+    // const online_stake_total = quorum ? this.util.nano.rawToMnano(quorum.online_stake_total) : null;
+    // this.onlineStakeTotal = online_stake_total ? new BigNumber(online_stake_total) : null;
 
     const allReps = [];
 
@@ -131,7 +131,7 @@ export class RepresentativeService {
     for (const representative of representatives) {
       const repOnline = onlineReps.indexOf(representative.account) !== -1;
       const knownRep = this.getRepresentative(representative.account);
-      const knownRepNinja = await this.ninja.getAccount(representative.account);
+      // const knownRepNinja = await this.ninja.getAccount(representative.account);
 
       const nanoWeight = this.util.nano.rawToMnano(representative.weight || 0);
       const percent = this.onlineStakeTotal ? nanoWeight.div(this.onlineStakeTotal).times(100) : new BigNumber(0);
@@ -181,13 +181,11 @@ export class RepresentativeService {
           repStatus.warn = true;
           repStatus.changeRequired = true;
         }
-      } else if (knownRepNinja) {
-        status = status === 'none' ? 'ok' : status;
-        label = knownRepNinja.alias;
       }
 
       const uptimeIntervalDays = 7;
 
+      const knownRepNinja = null;
       if (knownRepNinja && !repStatus.trusted) {
         if (knownRepNinja.closing === true) {
           status = 'alert';
@@ -361,7 +359,7 @@ export class RepresentativeService {
 
     const newRepList = list.map(entry => {
       if (entry.id.indexOf('xrb_') !== -1) {
-        entry.id = entry.id.replace('xrb_', 'nano_');
+        entry.id = entry.id.replace('xrb_', 'ban_');
       }
       return entry;
     });
@@ -439,47 +437,6 @@ export class RepresentativeService {
 
   // Default representatives list
   // tslint:disable-next-line:member-ordering
-  defaultRepresentatives = [
-    {
-      id: 'nano_3arg3asgtigae3xckabaaewkx3bzsh7nwz7jkmjos79ihyaxwphhm6qgjps4',
-      name: 'Nano Foundation #1',
-      warn: true,
-    },
-    {
-      id: 'nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou',
-      name: 'Nano Foundation #2',
-      warn: true,
-    },
-    {
-      id: 'nano_1q3hqecaw15cjt7thbtxu3pbzr1eihtzzpzxguoc37bj1wc5ffoh7w74gi6p',
-      name: 'Nano Foundation #3',
-      warn: true,
-    },
-    {
-      id: 'nano_3dmtrrws3pocycmbqwawk6xs7446qxa36fcncush4s1pejk16ksbmakis78m',
-      name: 'Nano Foundation #4',
-      warn: true,
-    },
-    {
-      id: 'nano_3hd4ezdgsp15iemx7h81in7xz5tpxi43b6b41zn3qmwiuypankocw3awes5k',
-      name: 'Nano Foundation #5',
-      warn: true,
-    },
-    {
-      id: 'nano_1awsn43we17c1oshdru4azeqjz9wii41dy8npubm4rg11so7dx3jtqgoeahy',
-      name: 'Nano Foundation #6',
-      warn: true,
-    },
-    {
-      id: 'nano_1anrzcuwe64rwxzcco8dkhpyxpi8kd7zsjc1oeimpc3ppca4mrjtwnqposrs',
-      name: 'Nano Foundation #7',
-      warn: true,
-    },
-    {
-      id: 'nano_1hza3f7wiiqa7ig3jczyxj5yo86yegcmqk3criaz838j91sxcckpfhbhhra1',
-      name: 'Nano Foundation #8',
-      warn: true,
-    },
-  ];
+  defaultRepresentatives = [];
 
 }

@@ -88,7 +88,7 @@ export class ChangeRepWidgetComponent implements OnInit {
   }
 
   async updateChangeableRepresentatives() {
-    await this.repService.detectChangeableReps(this.representatives);
+    // await this.repService.detectChangeableReps(this.representatives);
   }
 
   updateDisplayedRepresentatives() {

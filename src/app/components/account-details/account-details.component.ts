@@ -61,7 +61,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
   showAddressBook = false;
   addressBookMatch = '';
   amounts = [
-    { name: 'NANO', shortName: 'NANO', value: 'mnano' },
+    { name: 'BAN', shortName: 'BAN', value: 'mnano' },
     { name: 'knano', shortName: 'knano', value: 'knano' },
     { name: 'nano', shortName: 'nano', value: 'nano' },
   ];
@@ -84,7 +84,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
   blockHash = null;
   blockHashReceive = null;
   remoteVisible = false;
-  blockTypes: string[] = ['Send Nano', 'Change Representative'];
+  blockTypes: string[] = ['Send Ban', 'Change Representative'];
   blockTypeSelected: string = this.blockTypes[0];
   representativeList = [];
   representativesOverview = [];
@@ -154,9 +154,10 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
     this.representativeList.push( ...localReps.filter(rep => (!rep.warn)) );
 
     if (this.settings.settings.serverAPI) {
-      const verifiedReps = await this.ninja.recommendedRandomized();
+      // const verifiedReps = await this.ninja.recommendedRandomized();
 
       // add random recommended reps to the list
+      /**
       for (const representative of verifiedReps) {
         const temprep = {
           id: representative.account,
@@ -165,6 +166,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
 
         this.representativeList.push(temprep);
       }
+      */
     }
 
     // add untrusted local reps to the list
@@ -443,12 +445,10 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
     }
 
     const rep = this.repService.getRepresentative(this.representativeModel);
-    const ninjaRep = await this.ninja.getAccount(this.representativeModel);
+    // const ninjaRep = await this.ninja.getAccount(this.representativeModel);
 
     if (rep) {
       this.representativeListMatch = rep.name;
-    } else if (ninjaRep) {
-      this.representativeListMatch = ninjaRep.alias;
     } else {
       this.representativeListMatch = '';
     }
@@ -590,7 +590,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
     if (newBlock) {
       pendingBlock.received = true;
       this.notifications.removeNotification('success-receive');
-      this.notifications.sendSuccess(`Successfully received Nano!`, { identifier: 'success-receive' });
+      this.notifications.sendSuccess(`Successfully received Banano!`, { identifier: 'success-receive' });
       // clear the list of pending blocks. Updated again with reloadBalances()
       this.wallet.clearPendingBlocks();
     } else {
@@ -605,10 +605,10 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
   }
 
   async generateSend() {
-    const isValid = this.util.account.isValidAccount(this.toAccountID);
+    const isValid = this.util.account.isValidAccount(this.toAccountID.replace('ban_', 'nano_'));
     if (!isValid) return this.notifications.sendWarning(`To account address is not valid`);
     if (!this.accountID || !this.toAccountID) return this.notifications.sendWarning(`From and to account are required`);
-    if (!this.validateAmount()) return this.notifications.sendWarning(`Invalid NANO Amount`);
+    if (!this.validateAmount()) return this.notifications.sendWarning(`Invalid BAN Amount`);
 
     this.qrCodeImageBlock = null;
 
@@ -628,7 +628,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
     const nanoAmount = this.rawAmount.div(this.nano);
 
     if (this.amount < 0 || rawAmount.lessThan(0)) return this.notifications.sendWarning(`Amount is invalid`);
-    if (from.balanceBN.minus(rawAmount).lessThan(0)) return this.notifications.sendError(`From account does not have enough NANO`);
+    if (from.balanceBN.minus(rawAmount).lessThan(0)) return this.notifications.sendError(`From account does not have enough BAN`);
 
     // Determine a proper raw amount to show in the UI, if a decimal was entered
     this.amountRaw = this.rawAmount.mod(this.nano);
@@ -642,17 +642,17 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
     const defaultRepresentative = this.settings.settings.defaultRepresentative || this.nanoBlock.getRandomRepresentative();
     const representative = from.representative || defaultRepresentative;
     const blockData = {
-      account: this.accountID.replace('xrb_', 'nano_').toLowerCase(),
+      account: this.accountID.replace('xrb_', 'ban_').toLowerCase(),
       previous: from.frontier,
       representative: representative,
       balance: remainingDecimal,
-      link: this.util.account.getAccountPublicKey(this.toAccountID),
+      link: this.util.account.getAccountPublicKey(this.toAccountID.replace('ban_', 'nano_')),
     };
     this.blockHash = nanocurrency.hashBlock({
-      account: blockData.account,
+      account: blockData.account.replace('ban_', 'nano_'),
       link: blockData.link,
       previous: blockData.previous,
-      representative: blockData.representative,
+      representative: blockData.representative.replace('ban_', 'nano_'),
       balance: blockData.balance
     });
     console.log('Created block', blockData);
@@ -663,7 +663,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
     if (!('contents' in previousBlockInfo)) return this.notifications.sendError(`Previous block not found`);
     const jsonBlock = JSON.parse(previousBlockInfo.contents);
     const blockDataPrevious = {
-      account: jsonBlock.account.replace('xrb_', 'nano_').toLowerCase(),
+      account: jsonBlock.account.replace('xrb_', 'ban_').toLowerCase(),
       previous: jsonBlock.previous,
       representative: jsonBlock.representative,
       balance: jsonBlock.balance,
@@ -700,7 +700,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
     const newBalanceDecimal = newBalance.toString(10);
 
     const blockData = {
-      account: this.accountID.replace('xrb_', 'nano_').toLowerCase(),
+      account: this.accountID.replace('xrb_', 'ban_').toLowerCase(),
       previous: previousBlock,
       representative: representative,
       balance: newBalanceDecimal,
@@ -708,10 +708,10 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
     };
 
     this.blockHashReceive = nanocurrency.hashBlock({
-      account: blockData.account,
+      account: blockData.account.replace('ban_', 'nano_'),
       link: blockData.link,
       previous: blockData.previous,
-      representative: blockData.representative,
+      representative: blockData.representative.replace('ban_', 'nano_'),
       balance: blockData.balance
     });
     console.log('Created block', blockData);
@@ -724,7 +724,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
       if (!('contents' in previousBlockInfo)) return this.notifications.sendError(`Previous block not found`);
       const jsonBlock = JSON.parse(previousBlockInfo.contents);
       blockDataPrevious = {
-        account: jsonBlock.account.replace('xrb_', 'nano_').toLowerCase(),
+        account: jsonBlock.account.replace('xrb_', 'ban_').toLowerCase(),
         previous: jsonBlock.previous,
         representative: jsonBlock.representative,
         balance: jsonBlock.balance,
@@ -765,7 +765,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
     const balance = new BigNumber(account.balance);
     const balanceDecimal = balance.toString(10);
     const blockData = {
-      account: this.accountID.replace('xrb_', 'nano_').toLowerCase(),
+      account: this.accountID.replace('xrb_', 'ban_').toLowerCase(),
       previous: account.frontier,
       representative: this.representativeModel,
       balance: balanceDecimal,
@@ -773,10 +773,10 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
     };
 
     this.blockHash = nanocurrency.hashBlock({
-      account: blockData.account,
+      account: blockData.account.replace('ban_', 'nano_'),
       link: blockData.link,
       previous: blockData.previous,
-      representative: blockData.representative,
+      representative: blockData.representative.replace('ban_', 'nano_'),
       balance: blockData.balance
     });
 
@@ -788,7 +788,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
     if (!('contents' in previousBlockInfo)) return this.notifications.sendError(`Previous block not found`);
     const jsonBlock = JSON.parse(previousBlockInfo.contents);
     const blockDataPrevious = {
-      account: jsonBlock.account.replace('xrb_', 'nano_').toLowerCase(),
+      account: jsonBlock.account.replace('xrb_', 'ban_').toLowerCase(),
       previous: jsonBlock.previous,
       representative: jsonBlock.representative,
       balance: jsonBlock.balance,

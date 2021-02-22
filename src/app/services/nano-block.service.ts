@@ -13,13 +13,9 @@ const nacl = window['nacl'];
 @Injectable()
 export class NanoBlockService {
   representativeAccounts = [
-    'nano_1center16ci77qw5w69ww8sy4i4bfmgfhr81ydzpurm91cauj11jn6y3uc5y', // The Nano Center
-    'nano_1x7biz69cem95oo7gxkrw6kzhfywq4x5dupw4z1bdzkb74dk9kpxwzjbdhhs', // NanoCrawler
-    'nano_1zuksmn4e8tjw1ch8m8fbrwy5459bx8645o9euj699rs13qy6ysjhrewioey', // Nanowallets.guide
-    'nano_3chartsi6ja8ay1qq9xg3xegqnbg1qx76nouw6jedyb8wx3r4wu94rxap7hg', // Nano Charts
-    'nano_1ninja7rh37ehfp9utkor5ixmxyg8kme8fnzc4zty145ibch8kf5jwpnzr3r', // My Nano Ninja
-    'nano_1iuz18n4g4wfp9gf7p1s8qkygxw7wx9qfjq6a9aq68uyrdnningdcjontgar', // NanoTicker / Json
-    'nano_3power3gwb43rs7u9ky3rsjp6fojftejceexfkf845sfczyue4q3r1hfpr3o', // PowerNode
+    'ban_1creepi89mp48wkyg5fktgap9j6165d8yz6g1fbe5pneinz3by9o54fuq63m', // Network Explorer
+    'ban_1tipbotgges3ss8pso6xf76gsyqnb69uwcxcyhouym67z7ofefy1jz7kepoy', // Tip Bots
+    'ban_177d6g6o3g8tdgqd7ia9aitx5xkrs4o776bnci1exiqstrpwztbgg368gyj8', // Node Banano App
   ];
 
   zeroHash = '0000000000000000000000000000000000000000000000000000000000000000';
@@ -41,11 +37,13 @@ export class NanoBlockService {
     const balance = new BigNumber(toAcct.balance);
     const balanceDecimal = balance.toString(10);
     const link = this.zeroHash;
+
+    // Banano hack part 1: Replacing ban_ prefix with nano_ to be able to sign
     const blockData = {
       type: 'state',
-      account: walletAccount.id,
+      account: walletAccount.id.replace('ban_', 'nano_'),
       previous: toAcct.frontier,
-      representative: representativeAccount,
+      representative: representativeAccount.replace('ban_', 'nano_'),
       balance: balanceDecimal,
       link: link,
       signature: null,
@@ -55,7 +53,7 @@ export class NanoBlockService {
     if (ledger) {
       const ledgerBlock = {
         previousBlock: toAcct.frontier,
-        representative: representativeAccount,
+        representative: representativeAccount.replace('ban_', 'nano_'),
         balance: balanceDecimal,
       };
       try {
@@ -78,6 +76,10 @@ export class NanoBlockService {
       this.notifications.sendInfo(`Generating Proof of Work...`, { identifier: 'pow', length: 0 });
     }
 
+    // Banano hack part 2: Changing back to ban_ prefix to be able to publish block
+    blockData.account = blockData.account.replace('nano_', 'ban_');
+    blockData.representative = blockData.representative.replace('nano_', 'ban_');
+
     blockData.work = await this.workPool.getWork(toAcct.frontier, 1);
     this.notifications.removeNotification('pow');
 
@@ -92,94 +94,6 @@ export class NanoBlockService {
     }
   }
 
-  // This might be used in the future to send state changes on the blocks instead of normal true/false
-  // subscribeSend(walletAccount, toAccountID, rawAmount, ledger = false): Observable {
-  //   const doSend = async (observable) => {
-  //     console.log(`OBS: Promise resolve, running main send logic.`);
-  //     const startTime = Date.now();
-  //
-  //     console.log(`Observable: Creation event run`);
-  //     observable.next({ step: 0, startTime: startTime });
-  //
-  //
-  //     const fromAccount = await this.api.accountInfo(walletAccount.id);
-  //     if (!fromAccount) throw new Error(`Unable to get account information for ${walletAccount.id}`);
-  //
-  //     const remaining = new BigNumber(fromAccount.balance).minus(rawAmount);
-  //     const remainingDecimal = remaining.toString(10);
-  //     let remainingPadded = remaining.toString(16);
-  //     while (remainingPadded.length < 32) remainingPadded = '0' + remainingPadded; // Left pad with 0's
-  //
-  //     let blockData;
-  //     const representative = fromAccount.representative || (this.settings.settings.defaultRepresentative || this.representativeAccount);
-  //
-  //     observable.next({ step: 1, startTime: startTime, eventTime: ((Date.now() - startTime) / 1000).toFixed(3) });
-  //
-  //     let signature = null;
-  //     if (ledger) {
-  //       const ledgerBlock = {
-  //         previousBlock: fromAccount.frontier,
-  //         representative: representative,
-  //         balance: remainingDecimal,
-  //         recipient: toAccountID,
-  //       };
-  //       try {
-  //         this.sendLedgerNotification();
-  //         await this.ledgerService.updateCache(walletAccount.index, fromAccount.frontier);
-  //         const sig = await this.ledgerService.signBlock(walletAccount.index, ledgerBlock);
-  //         this.clearLedgerNotification();
-  //         signature = sig.signature;
-  //
-  //         observable.next({ step: 2, startTime: startTime, eventTime: ((Date.now() - startTime) / 1000).toFixed(3) });
-  //       } catch (err) {
-  //         this.clearLedgerNotification();
-  //         this.sendLedgerDeniedNotification(err);
-  //         return;
-  //       }
-  //     } else {
-  //       signature = this.signSendBlock(walletAccount, fromAccount, representative, remainingPadded, toAccountID);
-  //       observable.next({ step: 2, startTime: startTime, eventTime: ((Date.now() - startTime) / 1000).toFixed(3) });
-  //     }
-  //
-  //     if (!this.workPool.workExists(fromAccount.frontier)) {
-  //       this.notifications.sendInfo(`Generating Proof of Work...`);
-  //     }
-  //
-  //     blockData = {
-  //       type: 'state',
-  //       account: walletAccount.id,
-  //       previous: fromAccount.frontier,
-  //       representative: representative,
-  //       balance: remainingDecimal,
-  //       link: this.util.account.getAccountPublicKey(toAccountID),
-  //       work: await this.workPool.getWork(fromAccount.frontier),
-  //       signature: signature,
-  //     };
-  //
-  //     observable.next({ step: 3, startTime: startTime, eventTime: ((Date.now() - startTime) / 1000).toFixed(3) });
-  //
-  //     const processResponse = await this.api.process(blockData);
-  //     if (!processResponse || !processResponse.hash) throw new Error(processResponse.error || `Node returned an error`);
-  //
-  //     observable.next({ step: 4, startTime: startTime, eventTime: ((Date.now() - startTime) / 1000).toFixed(3) });
-  //
-  //     walletAccount.frontier = processResponse.hash;
-  //     this.workPool.addWorkToCache(processResponse.hash); // Add new hash into the work pool
-  //     this.workPool.removeFromCache(fromAccount.frontier);
-  //
-  //     observable.complete();
-  //   };
-  //
-  //
-  //   console.log(`Creating observable... on send...`);
-  //   // Create an observable that can be returned instantly.
-  //   return new Observable(observable => {
-  //
-  //     doSend(observable).then(val => console.log(val));
-  //   });
-  //
-  // }
-
   async generateSend(walletAccount, toAccountID, rawAmount, ledger = false) {
     const fromAccount = await this.api.accountInfo(walletAccount.id);
     if (!fromAccount) throw new Error(`Unable to get account information for ${walletAccount.id}`);
@@ -188,11 +102,13 @@ export class NanoBlockService {
     const remainingDecimal = remaining.toString(10);
 
     const representative = fromAccount.representative || (this.settings.settings.defaultRepresentative || this.getRandomRepresentative());
+
+    // Banano hack part 1: Replacing ban_ prefix with nano_ to be able to sign
     const blockData = {
       type: 'state',
-      account: walletAccount.id,
+      account: walletAccount.id.replace('ban_', 'nano_'),
       previous: fromAccount.frontier,
-      representative: representative,
+      representative: representative.replace('ban_', 'nano_'),
       balance: remainingDecimal,
       link: this.util.account.getAccountPublicKey(toAccountID),
       work: null,
@@ -202,9 +118,9 @@ export class NanoBlockService {
     if (ledger) {
       const ledgerBlock = {
         previousBlock: fromAccount.frontier,
-        representative: representative,
+        representative: representative.replace('ban_', 'nano_'),
         balance: remainingDecimal,
-        recipient: toAccountID,
+        recipient: toAccountID.replace('ban_', 'nano_'),
       };
       try {
         this.sendLedgerNotification();
@@ -225,6 +141,10 @@ export class NanoBlockService {
     if (!this.workPool.workExists(fromAccount.frontier)) {
       this.notifications.sendInfo(`Generating Proof of Work...`, { identifier: 'pow', length: 0 });
     }
+
+    // Banano hack part 2: Changing back to ban_ prefix to be able to publish block
+    blockData.account = blockData.account.replace('nano_', 'ban_');
+    blockData.representative = blockData.representative.replace('nano_', 'ban_');
 
     blockData.work = await this.workPool.getWork(fromAccount.frontier, 1);
     this.notifications.removeNotification('pow');
@@ -254,11 +174,13 @@ export class NanoBlockService {
     const newBalanceDecimal = newBalance.toString(10);
     let newBalancePadded = newBalance.toString(16);
     while (newBalancePadded.length < 32) newBalancePadded = '0' + newBalancePadded; // Left pad with 0's
+
+    // Banano hack part 1: Replacing ban_ prefix with nano_ to be able to sign
     const blockData = {
       type: 'state',
-      account: walletAccount.id,
+      account: walletAccount.id.replace('ban_', 'nano_'),
       previous: previousBlock,
-      representative: representative,
+      representative: representative.replace('ban_', 'nano_'),
       balance: newBalanceDecimal,
       link: sourceBlock,
       signature: null,
@@ -268,7 +190,7 @@ export class NanoBlockService {
     // We have everything we need, we need to obtain a signature
     if (ledger) {
       const ledgerBlock: any = {
-        representative: representative,
+        representative: representative.replace('ban_', 'nano_'),
         balance: newBalanceDecimal,
         sourceBlock: sourceBlock,
       };
@@ -300,6 +222,11 @@ export class NanoBlockService {
     }
 
     console.log('Get work for receive block');
+
+    // Banano hack part 2: Changing back to ban_ prefix to be able to publish block
+    blockData.account = blockData.account.replace('nano_', 'ban_');
+    blockData.representative = blockData.representative.replace('nano_', 'ban_');
+
     blockData.work = await this.workPool.getWork(workBlock, 1 / 64); // low PoW threshold since receive block
     this.notifications.removeNotification('pow');
     const processResponse = await this.api.process(blockData, openEquiv ? TxType.open : TxType.receive);

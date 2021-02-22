@@ -83,19 +83,19 @@ export class RepresentativesComponent implements OnInit {
       }
     });
 
-    this.loadingRepresentatives = true;
-    let repOverview = await this.representativeService.getRepresentativesOverview();
+    // this.loadingRepresentatives = true;
+    const repOverview = await this.representativeService.getRepresentativesOverview();
     // Sort by weight delegated
-    repOverview = repOverview.sort(
-      (a: FullRepresentativeOverview, b: FullRepresentativeOverview) => b.delegatedWeight.toNumber() - a.delegatedWeight.toNumber()
-    );
+    // repOverview = repOverview.sort(
+    //  (a: FullRepresentativeOverview, b: FullRepresentativeOverview) => b.delegatedWeight.toNumber() - a.delegatedWeight.toNumber()
+    // );
     this.representativeOverview = repOverview;
     repOverview.forEach(o => this.fullAccounts.push(...o.accounts));
     this.loadingRepresentatives = false;
 
     this.populateRepresentativeList();
 
-    await this.loadRecommendedReps();
+    // await this.loadRecommendedReps();
   }
 
   async populateRepresentativeList() {
@@ -103,6 +103,7 @@ export class RepresentativesComponent implements OnInit {
     const localReps = this.representativeService.getSortedRepresentatives();
     this.representativeList.push( ...localReps.filter(rep => (!rep.warn)) );
 
+    /**
     if (this.settings.settings.serverAPI) {
       const verifiedReps = await this.ninja.recommendedRandomized();
 
@@ -116,6 +117,7 @@ export class RepresentativesComponent implements OnInit {
         this.representativeList.push(temprep);
       }
     }
+    */
 
     // add untrusted local reps to the list
     this.representativeList.push( ...localReps.filter(rep => (rep.warn)) );
@@ -211,18 +213,17 @@ export class RepresentativesComponent implements OnInit {
     }
 
     const rep = this.representativeService.getRepresentative(this.toRepresentativeID);
-    const ninjaRep = await this.ninja.getAccount(this.toRepresentativeID);
+    // const ninjaRep = await this.ninja.getAccount(this.toRepresentativeID);
 
     if (rep) {
       this.representativeListMatch = rep.name;
-    } else if (ninjaRep) {
-      this.representativeListMatch = ninjaRep.alias;
     } else {
       this.representativeListMatch = '';
     }
   }
 
   async loadRecommendedReps() {
+    /**
     this.recommendedRepsLoading = true;
     try {
       const scores = await this.ninja.recommended() as any[];
@@ -246,7 +247,7 @@ export class RepresentativesComponent implements OnInit {
     } catch (err) {
       this.recommendedRepsLoading = null;
     }
-
+    */
   }
 
   previousReps() {
@@ -364,7 +365,7 @@ export class RepresentativesComponent implements OnInit {
     }
 
     // Detect if any new reps should be changed
-    await this.representativeService.detectChangeableReps(useCachedReps ? this.representativeOverview : null);
+    // await this.representativeService.detectChangeableReps(useCachedReps ? this.representativeOverview : null);
   }
 
   // open qr reader modal

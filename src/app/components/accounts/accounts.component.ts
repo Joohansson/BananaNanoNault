@@ -37,7 +37,7 @@ export class AccountsComponent implements OnInit {
 
   async ngOnInit() {
     this.reloadRepWarning$.subscribe(a => {
-      this.representatives.detectChangeableReps();
+      // this.representatives.detectChangeableReps();
     });
     this.sortAccounts();
   }

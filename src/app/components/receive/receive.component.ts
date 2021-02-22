@@ -142,7 +142,7 @@ export class ReceiveComponent implements OnInit {
 
     if (newBlock) {
       this.notificationService.removeNotification('success-receive');
-      this.notificationService.sendSuccess(`Successfully received Nano!`, { identifier: 'success-receive' });
+      this.notificationService.sendSuccess(`Successfully received Banano!`, { identifier: 'success-receive' });
       // clear the list of pending blocks. Updated again with reloadBalances()
       this.walletService.clearPendingBlocks();
     } else {

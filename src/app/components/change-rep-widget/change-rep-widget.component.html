@@ -39,7 +39,7 @@
       </div>
     </ng-container>
     <div [class]="[ 'representative-help-tooltip', showRepHelp==rep.id ? 'visible' : 'hidden' ]">
-      <p class="primary"><b>{{ rep.label || 'Unknown Rep' }}</b> represents you in the Nano consensus protocol by voting on your behalf.</p>
+      <p class="primary"><b>{{ rep.label || 'Unknown Rep' }}</b> represents you in the Banano consensus protocol by voting on your behalf.</p>
       <p>You can change representative at any time by clicking on its name above.</p>
       <div class="header-row">
         <div class="separator"></div>
@@ -75,10 +75,10 @@
           <span uk-icon="icon: check;"></span>We found no issues with uptime or weight distribution of your current representative.
         </p>
         <p *ngSwitchCase="(rep.statusText == 'warn')">
-          Switching to a different representative could improve security and decentralization of the Nano network.
+          Switching to a different representative could improve security and decentralization of the Banano network.
         </p>
         <p *ngSwitchCase="(rep.statusText == 'alert')">
-          It is <b>highly advised</b> to switch to a different representative, in order to improve security and decentralization of the Nano network.
+          It is <b>highly advised</b> to switch to a different representative, in order to improve security and decentralization of the Banano network.
         </p>
         <p *ngSwitchDefault>
           <span uk-icon="icon: question;"></span>We could not determine status of this representative.

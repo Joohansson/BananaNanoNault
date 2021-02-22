@@ -33,7 +33,7 @@ export class SendComponent implements OnInit {
   addressBookMatch = '';
 
   amounts = [
-    { name: 'NANO', shortName: 'NANO', value: 'mnano' },
+    { name: 'BAN', shortName: 'BAN', value: 'mnano' },
     { name: 'knano', shortName: 'knano', value: 'knano' },
     { name: 'nano', shortName: 'nano', value: 'nano' },
   ];
@@ -259,7 +259,7 @@ export class SendComponent implements OnInit {
       return this.notificationService.sendWarning(`From and to account are required`);
     }
     if (!this.validateAmount()) {
-      return this.notificationService.sendWarning(`Invalid NANO Amount`);
+      return this.notificationService.sendWarning(`Invalid BAN Amount`);
     }
 
     const from = await this.nodeApi.accountInfo(this.fromAccountID);
@@ -283,7 +283,7 @@ export class SendComponent implements OnInit {
       return this.notificationService.sendWarning(`Amount is invalid`);
     }
     if (from.balanceBN.minus(rawAmount).lessThan(0)) {
-      return this.notificationService.sendError(`From account does not have enough NANO`);
+      return this.notificationService.sendError(`From account does not have enough BAN`);
     }
 
     // Determine a proper raw amount to show in the UI, if a decimal was entered

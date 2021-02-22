@@ -415,7 +415,7 @@ export class LedgerService {
     blockData.contents = JSON.parse(blockData.contents);
 
     const cacheData = {
-      representative: blockData.contents.representative,
+      representative: blockData.contents.representative.replace('ban_', 'nano_'),
       balance: blockData.contents.balance,
       previousBlock: blockData.contents.previous === zeroBlock ? null : blockData.contents.previous,
       sourceBlock: blockData.contents.link,

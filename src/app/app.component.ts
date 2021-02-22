@@ -106,9 +106,9 @@ export class AppComponent implements OnInit {
         urlSearch.forEach(function(value, key) {
           queryParams[key] = value;
         });
-        this.router.navigate([path.replace('BananoNanoNault/', '')], { queryParams: queryParams});
+        this.router.navigate([path], { queryParams: queryParams});
       } else if (fragment && fragment.length) {
-        this.router.navigate([path.replace('BananoNanoNault/', '')], { fragment: fragment});
+        this.router.navigate([path], { fragment: fragment});
       } else {
         this.router.navigate([path]);
       }

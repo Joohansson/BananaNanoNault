@@ -49,7 +49,7 @@ export class AppSettingsService {
     serverWS: null,
     serverAuth: null,
     minimumReceive: null,
-    walletVersion: 1,
+    walletVersion: 2,
     lightModeEnabled: false
   };
 
@@ -180,7 +180,7 @@ export class AppSettingsService {
       serverWS: null,
       serverAuth: null,
       minimumReceive: null,
-      walletVersion: 1,
+      walletVersion: 2,
       lightModeEnabled: false,
     };
   }

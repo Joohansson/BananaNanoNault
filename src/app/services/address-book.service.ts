@@ -40,6 +40,9 @@ export class AddressBookService {
       if (entry.account.indexOf('xrb_') !== -1) {
         entry.account = entry.account.replace('xrb_', 'ban_');
       }
+      if (entry.account.indexOf('nano_') !== -1) {
+        entry.account = entry.account.replace('nano_', 'ban_');
+      }
       return entry;
     });
 

@@ -238,6 +238,9 @@ export class WalletService {
         if (account.id.indexOf('xrb_') !== -1) {
           account.id = account.id.replace('xrb_', 'ban_');
         }
+        if (account.id.indexOf('nano_') !== -1) {
+          account.id = account.id.replace('nano_', 'ban_');
+        }
         return account;
       });
 
@@ -418,7 +421,7 @@ export class WalletService {
 
         } else if (this.wallet.type === 'ledger') {
           const account: any = await this.ledgerService.getLedgerAccount(index);
-          accountAddress = account.address.replace('xrb_', 'ban_');
+          accountAddress = account.address.replace('xrb_', 'ban_').replace('nano_', 'ban_');
           accountPublicKey = account.publicKey.toUpperCase();
 
         } else {
@@ -496,7 +499,7 @@ export class WalletService {
     const account: any = await this.ledgerService.getLedgerAccount(index);
 
     const accountID = account.address;
-    const nanoAccountID = accountID.replace('xrb_', 'ban_');
+    const nanoAccountID = accountID.replace('xrb_', 'ban_').replace('nano_', 'ban_');
     const addressBookName = this.addressBook.getAccountName(nanoAccountID);
 
     const newAccount: WalletAccount = {

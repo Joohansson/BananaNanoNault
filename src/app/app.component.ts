@@ -173,13 +173,13 @@ export class AppComponent implements OnInit {
    */
   async patchXrbToNanoPrefixData() {
     // If wallet is version 2, data has already been patched.  Otherwise, patch all data
-    if (this.settings.settings.walletVersion >= 2) return;
+    if (this.settings.settings.walletVersion >= 3) return;
 
     await this.walletService.patchOldSavedData(); // Change saved xrb_ addresses to nano_
     this.addressBook.patchXrbPrefixData();
     this.representative.patchXrbPrefixData();
 
-    this.settings.setAppSetting('walletVersion', 2); // Update wallet version so we do not patch in the future.
+    this.settings.setAppSetting('walletVersion', 3); // Update wallet version so we do not patch in the future.
   }
 
   toggleNav() {

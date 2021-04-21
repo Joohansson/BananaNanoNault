@@ -361,6 +361,9 @@ export class RepresentativeService {
       if (entry.id.indexOf('xrb_') !== -1) {
         entry.id = entry.id.replace('xrb_', 'ban_');
       }
+      if (entry.id.indexOf('nano_') !== -1) {
+        entry.id = entry.id.replace('nano_', 'ban_');
+      }
       return entry;
     });
 
